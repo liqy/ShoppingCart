@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zerovoid.shoppingcart.view.FullListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listView"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+</com.zerovoid.shoppingcart.view.FullListView>
