@@ -8,6 +8,8 @@ import com.zerovoid.common.util.ToastHelper;
 import com.zerovoid.db.DBHelper;
 import com.zerovoid.http.VollyHelperNew;
 
+import org.xutils.x;
+
 
 public class InitApplication extends Application {
     private static InitApplication mInstance;
@@ -20,6 +22,8 @@ public class InitApplication extends Application {
         initSharePreferenceUtil();
         initToastHelper();
         initDBHelper();
+
+        x.Ext.init(this);
     }
 
     private void initDBHelper() {
