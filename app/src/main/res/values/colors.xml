@@ -6,4 +6,6 @@
     <color name="white">#FFFFFF</color>
     <color name="text_black">#000000</color>
     <color name="line_gray">#E0E0E0</color>
+
+    <color name="colorPrimaryDarkTrans">#CCf57257</color>
 </resources>

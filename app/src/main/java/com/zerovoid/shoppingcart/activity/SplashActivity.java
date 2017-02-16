@@ -30,7 +30,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 SplashActivity.this.finish(); // 结束启动动画界面
-                Intent intent = new Intent(SplashActivity.this, MainCartActivity.class);
+                Intent intent = new Intent(SplashActivity.this, TestScanActivity.class);
                 startActivity(intent);
             }
         }, 3000); // 启动动画持续3秒钟*/

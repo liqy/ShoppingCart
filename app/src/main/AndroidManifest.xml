@@ -3,6 +3,10 @@
     package="com.zerovoid.shoppingcart">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -22,10 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ShoppingCartActivity"
+            android:name=".activity.TestScanActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.MainCartActivity"
             android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".activity.TestGeneratectivity" android:screenOrientation="portrait"/>
+    <!--<activity android:name=".activity.TestScanActivity" android:screenOrientation="portrait"/>-->
     </application>
 
 </manifest>
