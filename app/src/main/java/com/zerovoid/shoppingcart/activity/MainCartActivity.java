@@ -2,24 +2,24 @@ package com.zerovoid.shoppingcart.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.zerovoid.shoppingcart.R;
-import com.zerovoid.shoppingcart.adapter.CartAdapter;
-import com.zerovoid.shoppingcart.model.ShopParams;
+import com.zerovoid.shoppingcart.adapter.RecyclerCartAdapter;
+import com.zerovoid.shoppingcart.model.ResponseRoot;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.http.body.RequestBody;
 import org.xutils.x;
 
-public class MainCartActivity extends AppCompatActivity {
+public class MainCartActivity extends AppCompatActivity implements XRecyclerView.LoadingListener {
 
     public static final String TAG = "MainCartActivity";
-
-    ListView cartList;
+    XRecyclerView cartList;
+    RecyclerCartAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +27,29 @@ public class MainCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_cart);
         initView();
         addShopCart();
-        getShopCart();
+        getShopCart(true);
     }
 
     private void initView() {
-        cartList = (ListView) findViewById(R.id.cartList);
-        cartList.setAdapter(new CartAdapter(this));
+        cartList = (XRecyclerView) findViewById(R.id.cartList);
+        cartList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RecyclerCartAdapter(this);
+        cartList.setAdapter(adapter);
+        cartList.setLoadingListener(this);
     }
+
 
     /**
      * 获取购物车数据
      */
-    public void getShopCart() {
+    public void getShopCart(final boolean isRefresh) {
         RequestParams params = new RequestParams("http://eleteamapi.ygcr8.com/v1/cart");
 
         //key value 形式提交
-         params.addBodyParameter("_terminal-type", "ios");
-         params.addBodyParameter("access_token", "bPEM1RCBME1FXIYsO2eAN40SrRDqh_Am");
-         params.addBodyParameter("app_cart_cookie_id", "8994117fa9b10b3023f53e9c388cb15c");
-         params.addBodyParameter("user_id", "121");
+        params.addBodyParameter("_terminal-type", "ios");
+        params.addBodyParameter("access_token", "bPEM1RCBME1FXIYsO2eAN40SrRDqh_Am");
+        params.addBodyParameter("app_cart_cookie_id", "8994117fa9b10b3023f53e9c388cb15c");
+        params.addBodyParameter("user_id", "121");
 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -55,7 +59,13 @@ public class MainCartActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, result);
+                ResponseRoot root = new Gson().fromJson(result, ResponseRoot.class);
+
+                if (isRefresh) {
+                    adapter.addData(root.data.cartItems);
+                } else {
+                    adapter.addData(root.data.cartItems);
+                }
             }
 
             @Override
@@ -65,7 +75,13 @@ public class MainCartActivity extends AppCompatActivity {
 
             @Override
             public void onFinished() {
-
+                if (isRefresh) {
+                    cartList.refreshComplete();
+                    cartList.setNoMore(false);
+                } else {
+                    cartList.loadMoreComplete();
+                    cartList.setNoMore(true);
+                }
             }
         });
     }
@@ -73,7 +89,7 @@ public class MainCartActivity extends AppCompatActivity {
     /**
      * 加入购物车
      */
-    void addShopCart(){
+    void addShopCart() {
         RequestParams params = new RequestParams("http://eleteamapi.ygcr8.com/v1/cart/add");
 
         //key value 形式提交
@@ -108,5 +124,13 @@ public class MainCartActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onLoadMore() {
+        getShopCart(false);
+    }
 
+    @Override
+    public void onRefresh() {
+        getShopCart(true);
+    }
 }

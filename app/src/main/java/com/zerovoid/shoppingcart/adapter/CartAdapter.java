@@ -65,7 +65,7 @@ public class CartAdapter extends BaseAdapter {
     class ViewHolder {
         FullListView listView;
         public ViewHolder(View convertView) {
-            listView = (FullListView) convertView.findViewById(R.id.listView);
+//            listView = (FullListView) convertView.findViewById(R.id.listView);
         }
     }
 }
